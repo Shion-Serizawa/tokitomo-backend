@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  db:
+    container_name: supabase-db
+    image: supabase/postgres:15.8.1.020
+    healthcheck:
+      test: pg_isready -U postgres -h localhost
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-example_password}
+      POSTGRES_DB: ${POSTGRES_DB:-example_db}
+      JWT_SECRET: ${JWT_SECRET:-example_secret}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  auth:
+    container_name: supabase-auth
+    image: supabase/gotrue:v2.165.1
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      GOTRUE_DB_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD:-example_password}@db:5432/${POSTGRES_DB:-example_db}
+      GOTRUE_JWT_SECRET: ${JWT_SECRET:-example_secret}
+      GOTRUE_SITE_URL: http://localhost:9999
+      GOTRUE_URI_ALLOW_LIST: http://localhost:9999
+    ports:
+      - "9999:9999"
+
+volumes:
+  db-data:
