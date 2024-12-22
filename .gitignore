@@ -1,1 +1,3 @@
 .env
+dev_enviroment/docker/.env
+dev_enviroment/docker/volumes/db/data/*
