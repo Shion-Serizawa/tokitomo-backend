@@ -70,3 +70,10 @@ services:
     ports:
       - "8085:3000"
     restart: unless-stopped
+
+  redis:
+    image: redis:6.2.14-alpine # Renderのバージョンに合わせる
+    container_name: tokitomo-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
