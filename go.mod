@@ -1,6 +1,6 @@
 module tokitomo-backend
 
-go 1.23.2
+go 1.23
 
 require (
 	github.com/bytedance/sonic v1.12.5 // indirect
